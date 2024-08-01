@@ -127,5 +127,5 @@ $(function () {
 		}
   	}
     //$("#audio").currentTime
-    setInterval(myTimer, 1000);// 50000);
+    setInterval(myTimer, 50000);
 });
