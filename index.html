@@ -39,16 +39,19 @@
             <div class="pure-g">
                 <hr/>
                 <div id="audioDiv" class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                    <!--
                     <br/>
                     <button id='atras' class='pure-button none botones'>&lt;</button>
                     <button id='adelante' class='pure-button none botones'>&gt;</button>
+                -->
                     <br/><audio controls id="audio" style="width: 90%">
                     </audio>
                 </div>
                 <hr/>
                 <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                    Último podcast escuchado: <span id="lastPodcast"></span>
-                     - <span id="lastTime"></span> min.
+                    <button id='playLast' class='pure-button none botones' data-mp3="" data-podcast="" data-min="">Último podcast escuchado</button>
+                    <br/>
+                    <span id="lastPodcast"></span> - <span id="lastTime"></span> min.
                 </div>
                 <hr/>
                 <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
