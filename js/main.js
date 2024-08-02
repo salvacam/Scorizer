@@ -13,25 +13,15 @@ $(function () {
     function play(cadena, pos,title,min) {
         $("#audio").attr("src", cadena);
         $("#audio").attr("autoplay", "");
-        /*
-        $("#audio").on("ended", function () {
-            if (pos < lista.length - 1) {
-                play(lista[pos + 1].r, pos + 1,lista[pos + 1].title);
-            } else {
-                play(lista[0].r, 0,lista[0].title);
-            }
-        });
-        */
-		$("#audio")[0].currentTime = min*60;
+		$("#audio")[0].currentTime = min;
         $("#titulo").remove();
         $("#audioDiv").prepend("<span data-pos='" + pos + "' id='titulo'>" + limpiaNombre(title) + "</span>");
-        //guardar nombre del podcast en localstorage
         localStorage.setItem("_scorizer_mp3", cadena);
     	$("#playLast")[0].dataset.mp3 = localStorage.getItem("_scorizer_mp3");
         localStorage.setItem("_scorizer_title", limpiaNombre(title));
     	$("#lastPodcast").html(localStorage.getItem("_scorizer_title"));
     	localStorage.setItem("_scorizer_time", min);    	
-    	$("#lastTime").html(localStorage.getItem("_scorizer_time"));
+    	$("#lastTime").html(parseInt(parseInt($("#audio")[0].currentTime)/60));
     	window.scrollTo(0, 0);
     }
     function buscar(url, nombre) {
@@ -94,34 +84,15 @@ $(function () {
                     $(".botones").removeClass("none");
                     $(".botones").addClass("visto");
 
-					escuchados = [0,1];
+					let escuchados = 1;
 					for (var i = 0; i < lista.length; i++) {
-						if (!escuchados.includes(i)) {
+						if (i > escuchados) {
 							$("#listado").append("<button class='pure-button pista' data-pista='" + i + "'>" + lista[i].time + " - " + limpiaUrl(lista[i].title) + "</button><br/>");
 						}
 					}
-					//play(lista[0].r, 0,lista[0].title);
 					$(".pista").on("click", function () {
 						play(lista[$(this).data("pista")].r, $(this).data("pista"),lista[$(this).data("pista")].title,0);
 					});
-					/*
-					$("#atras").on("click", function () {
-						var pos = $("#titulo").data("pos");
-						if (pos > 0) {
-							play(lista[pos - 1].r, pos - 1,lista[pos - 1].title);
-						} else {
-							play(lista[lista.length - 1].r, lista.length - 1,lista[lista.length - 1].title);
-						}
-					});
-					$("#adelante").on("click", function () {
-						var pos = $("#titulo").data("pos");
-						if (pos < lista.length - 1) {
-							play(lista[pos + 1].r, pos + 1,lista[pos + 1].title);
-						} else {
-							play(lista[0].r, 0,lista[0].title);
-						}
-					});
-					*/
 				} else {
 					$("#listado").append("<h5>Error al parsear el feed</h5>");
 				}
@@ -132,31 +103,37 @@ $(function () {
 			}
 		});
     }
+    
     buscar("https://anchor.fm/s/90df42ac/podcast/rss","Scorizer");
 
     $("#playLast")[0].dataset.mp3 = localStorage.getItem("_scorizer_mp3");
     $("#lastPodcast").html(localStorage.getItem("_scorizer_title"));
     $("#playLast")[0].dataset.podcast = localStorage.getItem("_scorizer_title");
-    $("#lastTime").html(localStorage.getItem("_scorizer_time"));
+	$("#lastTime").html(parseInt(localStorage.getItem("_scorizer_time")/60));
 	$("#playLast")[0].dataset.min = localStorage.getItem("_scorizer_time");
 	
 	function myTimer() {
 		if ($("#audio")[0].duration > 0) {
-			localStorage.setItem("_scorizer_time", parseInt(parseInt($("#audio")[0].currentTime)/60));
-    		$("#lastTime").html(localStorage.getItem("_scorizer_time"));
+			localStorage.setItem("_scorizer_time", parseInt($("#audio")[0].currentTime));
+    		$("#lastTime").html(parseInt(localStorage.getItem("_scorizer_time")/60));
     		$("#playLast")[0].dataset.min = localStorage.getItem("_scorizer_time");
 		}
   	}
-    //$("#audio").currentTime
 
 	$("#playLast").on("click", function (x) {
-		//debugger;
-
 		play(x.target.dataset.mp3, 0,x.target.dataset.podcast,x.target.dataset.min);
-
-		//console.log(x.target.dataset.podcast);
-		//console.log(x.target.dataset.min);
-
 	});
-    setInterval(myTimer, 5000);// 50000);
+
+	$("#play").on("click", function (x) {
+		if ($('audio')[0].src != '') {
+			if($('audio')[0].paused) {
+				$('audio')[0].play();
+				$("#play").html("Pause");
+			} else {
+				$('audio')[0].pause();
+				$("#play").html("Play");
+			}	
+		}
+	});
+    setInterval(myTimer, 30000);
 });
