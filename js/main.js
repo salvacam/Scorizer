@@ -12,8 +12,10 @@ $(function () {
     }
     function play(cadena, pos,title,min) {
         $("#audio").attr("src", cadena);
-        $("#audio").attr("autoplay", "");
+        //TODO
+        //$("#audio").attr("autoplay", "");
 		$("#audio")[0].currentTime = min;
+		$("#audio")[0].title = limpiaNombre(title);
         $("#titulo").remove();
         $("#audioDiv").prepend("<span data-pos='" + pos + "' id='titulo'>" + limpiaNombre(title) + "</span>");
         localStorage.setItem("_scorizer_mp3", cadena);
@@ -48,7 +50,9 @@ $(function () {
 
 				var itemPos = 1;
 				var itemPos = 1;
-				for (i = items.length-1; i >= 0; i--) {
+				//TODO cambiar el orden
+				for (i = 0; i < items.length; i++) {
+				//for (i = items.length-1; i >= 0; i--) {
 					//items.forEach(el => {
     				//var inicio = el.querySelector("enclosure").outerHTML.toString().indexOf('url="');
     				var inicio = items[i].querySelector("enclosure").outerHTML.toString().indexOf('url="');
@@ -79,14 +83,16 @@ $(function () {
 				$("#listado").append("<h3>" + nombre + "</h3>");
 				if (lista.length > 0) {
 
-                	//console.log(lista);
-                	//data.reverse();                    
+                	//console.log(lista);                
                     $(".botones").removeClass("none");
                     $(".botones").addClass("visto");
 
-					let escuchados = 1;
+					let escuchados = 0; //22; //TODO poner a 0 
 					for (var i = 0; i < lista.length; i++) {
-						if (i > escuchados) {
+						if (i >= escuchados) { // && i < 30) {
+
+							//$("#listado").append("<audio controls src='" + lista[i].r + "' title='"+ lista[i].title + "'></audio>");
+
 							$("#listado").append("<button class='pure-button pista' data-pista='" + i + "'>" + lista[i].time + " - " + limpiaUrl(lista[i].title) + "</button><br/>");
 						}
 					}
